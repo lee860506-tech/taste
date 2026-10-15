@@ -5,7 +5,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {useEffect,useRef,useState} from 'react';
 import {categories,type Restaurant} from '@/types/restaurant';
-import {defaultNeighborhoodCode,neighborhoods} from '@/data/neighborhoods';
+import {defaultNeighborhoodCode,neighborhoods,provinces,regionOptions} from '@/data/neighborhoods';
 import CategoryIcon from '@/components/restaurant/CategoryIcon';
 import {rememberRestaurant} from '@/lib/restaurant-cache';
 
@@ -21,6 +21,7 @@ type PublicRestaurant = Extract<Restaurant,{isSample:false}>;
 export default function Home() {
   const router = useRouter();
   const [regionCode, setRegionCode] = useState<string>(defaultNeighborhoodCode);
+  const validRegionCode = /^(\d{2}|\d{5}|\d{8})$/.test(regionCode);
   const exploreHref = '/explore?regionCode=' + encodeURIComponent(regionCode);
   const [activeShop,setActiveShop] = useState<CoverShop>();
   const [shopItems,setShopItems] = useState<PublicRestaurant[]>([]);
@@ -88,7 +89,7 @@ export default function Home() {
     </section>
 
     <section id="regions" className="storybook-discovery">
-      <div className="storybook-region-card"><small>⌖ 마을에서 먼저 찾아보기</small><h2>어디로 떠나볼까요?</h2><p>동네를 고르면 실제 공공데이터에서 음식점 20건을 먼저 보여줘요.</p><label htmlFor="home-region">탐험할 동네</label><div className="storybook-region-actions"><select id="home-region" value={regionCode} onChange={event => changeRegion(event.target.value)}>{neighborhoods.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</select><Link className="primary" href={exploreHref}>맛집 탐험 ↗</Link></div><small>음식점 정보와 좌표는 공공데이터 제공기관의 응답을 사용해요.</small></div>
+      <div className="storybook-region-card"><small>⌖ 마을에서 먼저 찾아보기</small><h2>어디로 떠나볼까요?</h2><p>지역을 고르면 실제 공공데이터에서 음식점 20건을 먼저 보여줘요.</p><label htmlFor="home-region">탐험할 지역</label><div className="storybook-region-actions"><select id="home-region" value={regionOptions.some(item=>item.code===regionCode)?regionCode:'custom'} onChange={event => changeRegion(event.target.value==='custom'?'':event.target.value)}><optgroup label="동네 예시">{neighborhoods.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</optgroup><optgroup label="시·도 전체 · 첫 20건">{provinces.map(item => <option key={item.code} value={item.code}>{item.name}</option>)}</optgroup><option value="custom">다른 지역 코드 직접 입력</option></select>{validRegionCode?<Link className="primary" href={exploreHref}>맛집 탐험 ↗</Link>:<button className="primary" disabled>지역 코드 입력 후 탐험</button>}</div>{!regionOptions.some(item=>item.code===regionCode)&&<input className="storybook-region-input" aria-label="지역 코드 직접 입력" value={regionCode} placeholder="시·도 2자리 / 시군구 5자리 / 행정동 8자리" inputMode="numeric" onChange={event=>changeRegion(event.target.value.replace(/\D/g,'').slice(0,8))}/>}<small>시·도 선택은 지역 전체의 첫 20건을 보여줘요. 다른 지역은 공식 행정구역 코드를 입력할 수 있어요.</small></div>
       <div className="storybook-nearby-card"><small>NEAR ME</small><h2>내 주변 맛집도 찾아봐요</h2><p>현재 위치를 확인한 뒤 원하는 거리를 선택해 탐색할 수 있어요.</p><div className="radii" aria-label="주변 탐색 거리">{[500, 1000, 3000].map(distance => <button key={distance} onClick={() => router.push('/explore?nearby=1&radius=' + distance)}>{distance < 1000 ? '500m' : distance / 1000 + 'km'}</button>)}</div><small>위치 권한은 탐험 화면에서 요청해요.</small></div>
     </section>
   </main>;

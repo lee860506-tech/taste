@@ -60,6 +60,7 @@
 .storybook-region-card label{display:block;font-size:12px;font-weight:700;margin-bottom:9px}
 .storybook-region-actions{display:flex;gap:12px;align-items:center;margin-bottom:14px}
 .storybook-region-actions select{min-width:0;flex:1;border:1px solid #ceb9c5;border-radius:13px;background:#fff;padding:13px;font-size:13px}
+.storybook-region-input{width:100%;border:1px solid #ceb9c5;border-radius:13px;background:#fff;padding:13px;font-size:13px;margin-bottom:12px}
 .storybook-region-actions .primary{box-shadow:0 4px 0 #8665c2;padding:13px 18px;gap:10px;font-size:13px;border-radius:13px}
 .storybook-nearby-card .radii{margin:20px 0}
 .storybook-nearby-card .radii button{border-radius:12px;border-color:#bba5d5;padding:11px 20px;background:#fff9ff;font-size:13px;font-weight:700}

@@ -42,7 +42,7 @@ export default function Home() {
       const p=new URLSearchParams({source:'commercial',page:'1',regionCode,category:shop.category});
       let response=await fetch(`/api/restaurants/db?${p}`,{signal:controller.signal});
       let data=await response.json();let origin:'database'|'live'='database';
-      if(response.status===503){response=await fetch('/api/restaurants',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'commercial',page:1,regionCode}),signal:controller.signal});data=await response.json();origin='live';}
+      if(response.status===503||(response.ok&&data.total===0)){response=await fetch('/api/restaurants',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'commercial',page:1,regionCode}),signal:controller.signal});data=await response.json();origin='live';}
       if(!response.ok)throw new Error(data.error||'음식점 정보를 불러오지 못했어요.');
       if(!controller.signal.aborted){setShopStorage(origin);setShopItems((data.items as Restaurant[]).filter((item):item is PublicRestaurant=>!item.isSample&&item.category===shop.category).slice(0,3));}
     }catch(error){if(!controller.signal.aborted)setShopError((error as Error).message)}

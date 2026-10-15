@@ -48,9 +48,11 @@
 - 상점 정보 카드의 상세 링크를 눌러 실제 음식점 상세가 열리도록 인코딩된 경로 ID 처리를 수정하고 확인했다.
 - 390px 모바일에서 가로 넘침이 없고 표지 클릭 영역이 화면 안에 있음을 확인했다. 콘솔 오류·경고 0개. `pnpm build`, `pnpm typecheck`, 자동 테스트 11개 통과.
 
-## 5·6단계 Supabase/PostGIS 준비 · 2026-10-15
+## 5·6단계 Supabase/PostGIS 연결 · 2026-10-15
 
-- 실제 Supabase REST 조회 결과 `public.restaurants`가 없어 HTTP 404 `PGRST205`를 받았다. `.env.local`에는 공개 URL·키가 있고 서버용 `SUPABASE_SECRET_KEY`는 없다. 따라서 실제 DB 저장·새로고침 유지·PostGIS 검색 성공은 **아직 검증하지 않았다**.
-- SQL 마이그레이션에 `(source, source_id)` UNIQUE, nullable `business_status`, PostGIS geography 위치·GIST 인덱스, 공개 SELECT와 비공개 쓰기 RLS, 거리별 검색 RPC를 작성했다. `supabase/verify-radius.sql`은 실행 시 500m/1km/3km 안팎과 경도(X)·위도(Y)를 테스트하고 롤백한다. SQL Editor에서는 아직 실행되지 않았다.
-- 서버 전용 동기화 Route Handler는 보호 토큰 없이 HTTP 401을 반환했다. DB 목록 경로는 테이블 부재를 HTTP 503의 마이그레이션 안내로 반환했다. 탐험 브라우저는 이를 감지해 기존 공공데이터 직접 조회 20건을 표시하고 DB 미설정 상태를 명시했다. 콘솔 오류·경고는 없었다.
-- Supabase REST 호출 모의 테스트에서 공개 키 목록 조회, 비밀 키 upsert 및 원본 ID 충돌 대상, 위도·경도 순서와 미터 단위 인자 전달을 확인했다. 전체 자동 테스트 14개 및 TypeScript 검사는 통과했다. 실제 DB 반경 판정·정렬은 SQL 적용 후 검증해야 한다.
+- 새 Supabase 프로젝트에 SQL 마이그레이션을 실행했다. `(source, source_id)` UNIQUE, nullable `business_status`, PostGIS geography 위치·GIST 인덱스, 공개 SELECT와 비공개 쓰기 RLS, 거리별 검색 RPC를 생성했다. SQL Editor가 성공을 반환하고 공개 키 REST 조회가 HTTP 200을 반환했다.
+- `supabase/verify-radius.sql`과 동등한 트랜잭션 검증을 SQL Editor에서 실행했다. 500m·1km·3km 안팎, 미터 거리, 경도(X)·위도(Y) 판정이 통과했고 `ROLLBACK` 뒤 DB는 0건이었다.
+- 서버 전용 동기화 경로로 서울 종로구 종로1·2·3·4가동 상가정보 20건을 저장했다. DB 목록 조회는 20건, 검증 좌표는 20건이었다. 같은 페이지를 다시 동기화해도 총 20건과 원본 ID가 유지됐다.
+- 실제 DB를 중심으로 한 반경 검색은 500m 8건, 1km 20건, 3km 20건을 반환했다. 모든 결과가 해당 반경 안에 있었고 거리순이었다. 이 검증은 저장된 첫 20건을 대상으로 하며 지역 전체 음식점 수를 뜻하지 않는다.
+- 브라우저에서 새로고침 후 `Supabase DB 저장 자료` 20건, 한식 필터 11건, 이름 검색 1건, 지도 마커·요약 카드 동기화, DB 상세 화면을 확인했다. 상세 화면을 새로고침해도 주소·원본 업종·좌표가 유지됐다.
+- DB에 저장된 자료가 없는 지역은 기존 공공데이터 직접 조회로 전환하고 화면에 출처를 표시한다. `pnpm typecheck`와 `pnpm build`가 통과했다.

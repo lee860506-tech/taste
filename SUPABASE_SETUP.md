@@ -1,6 +1,6 @@
 # Supabase DB 연결
 
-현재 프로젝트의 Supabase에는 `public.restaurants` 테이블이 아직 없습니다. 다음 설정을 마치기 전에는 화면이 기존 공공데이터 API 직접 조회로 전환하며, DB 저장·반경 검색 완료로 표시하지 않습니다.
+2026-10-15에 새 Supabase 프로젝트에서 `public.restaurants` 마이그레이션을 실행하고 첫 동네 음식점 20건을 저장했습니다. 다른 지역에 DB 자료가 없으면 화면은 출처를 표시하며 기존 공공데이터 API 직접 조회로 전환합니다. 새 환경에서 다시 설치할 때는 아래 순서를 따르세요.
 
 1. Supabase Dashboard → SQL Editor → New query에서 [`supabase/migrations/20261015_restaurants_postgis.sql`](supabase/migrations/20261015_restaurants_postgis.sql) 전체를 실행합니다. PostGIS 확장, 테이블, 중복 방지 제약, 위치 트리거·공간 인덱스, RLS, 반경 검색 함수가 생성됩니다.
 2. 프로젝트 루트 `.env.local`에 다음 값을 설정합니다. URL·공개 키는 기존 값이 있으면 유지합니다. `SUPABASE_SECRET_KEY`는 Supabase Dashboard → Project Settings → API Keys의 **secret key (`sb_secret_…`)**입니다. 공개 키나 공공데이터 인증키를 이 자리에 넣지 마세요.

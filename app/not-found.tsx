@@ -1,0 +1,1 @@
+import Link from 'next/link';export default function NotFound(){return <main className="page-shell empty"><h1>이 맛집은 지도에 없어요</h1><p>탐험 목록에서 다른 맛집을 골라 주세요.</p><Link className="primary" href="/explore">목록으로 돌아가기</Link></main>}

@@ -1,0 +1,11 @@
+{
+  "source": "PROJ EPSG database via pyproj; always_xy=True",
+  "input": [
+    282980.081920586,
+    232769.925518123
+  ],
+  "expected": {
+    "longitude": 127.91641248606075,
+    "latitude": 35.591247357109886
+  }
+}

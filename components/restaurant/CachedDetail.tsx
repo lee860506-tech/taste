@@ -1,0 +1,3 @@
+'use client';
+import {useEffect,useState} from 'react';import Link from 'next/link';import {cachedRestaurants} from '@/lib/restaurant-cache';import type {Restaurant} from '@/types/restaurant';import Detail from './Detail';
+export default function CachedDetail({id}:{id:string}){const [r,setR]=useState<Restaurant>();const[ready,setReady]=useState(false);useEffect(()=>{setR(cachedRestaurants().find(x=>x.id===id));setReady(true)},[id]);if(r)return <Detail restaurant={r}/>;return <main className="page-shell empty"><h1>{ready?'이 브라우저에 조회 기록이 없어요':'음식점 정보를 여는 중…'}</h1>{ready&&<><p>공공데이터에서 음식점을 다시 조회해 주세요.</p><Link href="/explore" className="primary">맛집 탐험으로</Link></>}</main>}

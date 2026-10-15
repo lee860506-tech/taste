@@ -1,0 +1,4 @@
+import {notFound} from 'next/navigation';import {restaurantRepository} from '@/lib/restaurants';import Detail from '@/components/restaurant/Detail';import CachedDetail from '@/components/restaurant/CachedDetail';
+import {getDbRestaurant} from '@/lib/supabase/restaurants';
+import type {PublicSource} from '@/types/restaurant';
+export default async function RestaurantPage({params}:{params:Promise<{id:string}>}){const{ id:rawId }=await params;let id:string;try{id=decodeURIComponent(rawId)}catch{notFound()}const r=restaurantRepository.find(id);if(r)return <Detail restaurant={r}/>;const match=/^(commercial|licenses):([\w-]+)$/.exec(id);if(match){try{const stored=await getDbRestaurant(match[1] as PublicSource,match[2]);if(stored)return <Detail restaurant={stored}/>}catch{}return <CachedDetail id={id}/>}notFound();}

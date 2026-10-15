@@ -1,0 +1,66 @@
+{
+  "header": {
+    "description": "소상공인시장진흥공단 상권정보 업종대분류 코드",
+    "columns": [
+      "상권업종대분류코드",
+      "상권업종대분류코드명",
+      "데이터기준일자"
+    ],
+    "resultCode": "00",
+    "resultMsg": "NORMAL SERVICE"
+  },
+  "body": {
+    "items": [
+      {
+        "indsLclsCd": "M1",
+        "indsLclsNm": "과학·기술",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "P1",
+        "indsLclsNm": "교육",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "Q1",
+        "indsLclsNm": "보건의료",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "L1",
+        "indsLclsNm": "부동산",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "G2",
+        "indsLclsNm": "소매",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "S2",
+        "indsLclsNm": "수리·개인",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "I1",
+        "indsLclsNm": "숙박",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "N1",
+        "indsLclsNm": "시설관리·임대",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "R1",
+        "indsLclsNm": "예술·스포츠",
+        "stdrDt": "2023-02-28"
+      },
+      {
+        "indsLclsCd": "I2",
+        "indsLclsNm": "음식",
+        "stdrDt": "2023-02-28"
+      }
+    ]
+  }
+}

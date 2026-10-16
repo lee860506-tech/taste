@@ -15,6 +15,13 @@ const coverShops = [
   {id:'bakery',label:'베이커리',category:'디저트',description:'그림 속 베이커리 테마'},
   {id:'dessert',label:'디저트',category:'디저트',description:'그림 속 디저트 테마'},
 ] as const;
+const signpostLinks = [
+  {id:'restaurant',label:'RESTAURANT',category:null,sample:false,description:'선택한 동네의 실제 음식점 지도 보기'},
+  {id:'cafe',label:'CAFE',category:'카페',sample:false,description:'선택한 동네의 실제 카페 업종 보기'},
+  {id:'dessert',label:'DESSERT',category:'디저트',sample:true,description:'디저트 샘플 음식점 지도 보기'},
+  {id:'bakery',label:'BAKERY',category:'디저트',sample:true,description:'베이커리 표지판: 디저트 샘플 음식점 지도 보기'},
+] as const;
+const signpostHref=(item:typeof signpostLinks[number],regionCode:string)=>`/explore?${item.sample?'source=sample':`regionCode=${encodeURIComponent(regionCode)}`}${item.category?`&category=${encodeURIComponent(item.category)}`:''}&view=map`;
 type CoverShop = typeof coverShops[number];
 type PublicRestaurant = Extract<Restaurant,{isSample:false}>;
 
@@ -63,10 +70,13 @@ export default function Home() {
         <Link className="cover-hotspot cover-search" href="/search" aria-label="음식점 검색" />
         <Link className="cover-hotspot cover-saved" href="/saved" aria-label="내 맛집 보기" />
       </nav>
+      <nav className="cover-signpost" aria-label="나무 표지판 음식점 바로가기">{signpostLinks.map(item=><Link key={item.id} className={`cover-hotspot cover-sign-${item.id}`} href={signpostHref(item,regionCode)} aria-label={item.description}/>)}</nav>
       <Link className="cover-hotspot cover-start" href={exploreHref} aria-label="맛집 탐험 시작" />
       <Link className="cover-hotspot cover-nearby" href="/explore?nearby=1&radius=1000" aria-label="내 주변 1km 음식점 찾기" />
       {coverShops.map(shop=><button key={shop.id} type="button" className={`cover-hotspot cover-shop cover-shop-${shop.id}`} aria-label={`${shop.label} 아이콘: 선택한 동네의 실제 음식점 정보 보기`} onClick={()=>showShop(shop)}/>)}
     </section>
+
+    <nav className="story-mobile-signpost" aria-label="음식 종류 바로가기">{signpostLinks.map(item=><Link key={item.id} href={signpostHref(item,regionCode)} aria-label={item.description}>{item.label}{item.sample&&<small>샘플</small>}</Link>)}</nav>
 
     {activeShop&&<section className="cover-shop-info" ref={shopInfo} aria-live="polite">
       <div className="cover-shop-info-heading"><div><small>✦ {activeShop.description}</small><h2>{activeShop.label} 음식점 정보</h2></div><button type="button" aria-label="상점 정보 닫기" onClick={()=>{shopRequest.current?.abort();setActiveShop(undefined)}}>×</button></div>

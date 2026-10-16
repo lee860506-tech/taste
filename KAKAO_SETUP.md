@@ -11,6 +11,7 @@ REST API 키나 Admin 키를 넣지 않는다. `.env.local`은 Git에서 제외�
 카카오 개발자 사이트의 앱 → 앱 설정 → 앱 → 플랫폼 키에서 해당 JavaScript 키의 JavaScript SDK 도메인에 다음을 등록한다.
 - `http://127.0.0.1:3001`
 - `http://localhost:3001` (localhost로 접속할 경우)
+- `https://taste-sooty.vercel.app` (배포 사이트와 Android WebView 기본 주소)
 
 공식 안내: https://apis.map.kakao.com/web/guide/
 앱의 카카오맵 사용 설정도 확인한다. 허용 주소의 프로토콜·호스트·포트는 접속 주소와 일치해야 한다.
@@ -27,6 +28,7 @@ http://127.0.0.1:3001/explore 에서 카카오 지도 버튼을 누른다. 키 �
 - SDK 오류·등록 도메인 불일치·시간 초과 시 안내와 재시도 버튼을 보여 준다. 목록 검색은 계속 사용할 수 있다.
 - 2026-10-15: `준혁이의 맛집` 앱(ID 1606587)의 JavaScript SDK 도메인에 `http://127.0.0.1:3001`을 등록하고 카카오맵 사용 설정을 켰다. SDK 요청 HTTP 200, 브라우저에서 실제 지도 타일·샘플 마커·목록 선택에 따른 이동·마커 클릭에 따른 상세 카드 동기화를 확인했다.
 - 공공데이터 API 두 종류는 별도로 연결되어 실제 응답을 확인했다. 2026-10-15에 Supabase 저장과 PostGIS 반경 검색도 연결해 검증했다.
+- 2026-10-16: `준혁이의 맛집` 앱(ID 1606587)의 JavaScript SDK 허용 도메인에 `https://taste-sooty.vercel.app`을 추가했다. 배포 도메인에서 SDK HTTP 200, 실제 지도 타일·20개 공공데이터 마커·목록 선택에 따른 지도 이동·마커 클릭에 따른 상세 카드 동기화를 확인했다.
 
 현재 PC에서 pnpm 명령을 찾을 수 없다면:
 ```powershell

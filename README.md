@@ -21,3 +21,5 @@ pnpm start --port 3001
 샘플 음식점은 가상이며 데모 좌표는 실제 위치가 아닙니다. 공공데이터 출처는 카드에 표시합니다. 영업상태는 인허가 기록일 뿐 실시간 영업 확인이 아닙니다. Supabase 테이블과 서버 비밀 키를 설정하면 음식점 목록·상세는 DB에서 읽고, 별도 보호된 서버 동기화 경로로 기존 기록을 갱신합니다. PostGIS 반경 검색은 DB의 저장 좌표를 사용하며 거리순으로 최대 20건을 반환합니다. 설정 전에는 기존 공공데이터 직접 조회로 전환하고 이를 화면에 표시합니다. 찜 목록은 브라우저 로컬 저장소를 사용합니다.
 
 Supabase SQL·키·동기화 절차는 [SUPABASE_SETUP.md](SUPABASE_SETUP.md)에, 카카오 개발 주소 등록은 [KAKAO_SETUP.md](KAKAO_SETUP.md)에 정리했습니다. 검증 범위는 [VERIFICATION.md](VERIFICATION.md)에 있습니다.
+
+Android Studio 앱은 [android/README.md](android/README.md)를 참고하세요. 기존 웹 화면을 WebView로 표시하는 방식이며, 에뮬레이터 개발용 빌드는 PC 웹 서버와 `adb reverse`로 연결합니다. 실제 기기 배포에는 HTTPS 웹사이트 주소가 필요합니다.

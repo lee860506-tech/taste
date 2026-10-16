@@ -5,3 +5,4 @@ local.properties
 .idea/
 captures/
 emulator-*.png
+gradle/gradle-daemon-jvm.properties

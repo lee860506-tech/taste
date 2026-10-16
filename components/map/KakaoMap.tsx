@@ -5,7 +5,7 @@ import type { KakaoMaps, KakaoMapInstance, KakaoMarker, KakaoInfoWindow } from '
 import { loadKakaoMaps } from '@/lib/kakao-loader';
 import { mapPosition, SAMPLE_MAP_CENTER } from '@/lib/map-position';
 
-export default function KakaoMap({ items, selected, onSelect, center, onReady }: { items: Restaurant[]; selected?: string; onSelect: (id: string) => void; center?: Coordinates; onReady?: () => void }) {
+export default function KakaoMap({ items, selected, highlighted, onSelect, center, onReady }: { items: Restaurant[]; selected?: string; highlighted?: string[]; onSelect: (id: string) => void; center?: Coordinates; onReady?: () => void }) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<KakaoMapInstance | null>(null);
   const markers = useRef(new Map<string, KakaoMarker>());
@@ -56,7 +56,7 @@ export default function KakaoMap({ items, selected, onSelect, center, onReady }:
 
   useEffect(() => {
     info.current?.close();
-    for(const [id,marker] of markers.current){marker.setImage(new sdk!.MarkerImage(id===selected?'/assets/map-marker-selected.svg':'/assets/map-marker.svg',new sdk!.Size(40,48)));marker.setZIndex(id===selected?10:1);}
+    for(const [id,marker] of markers.current){const active=id===selected||highlighted?.includes(id);marker.setImage(new sdk!.MarkerImage(active?'/assets/map-marker-selected.svg':'/assets/map-marker.svg',new sdk!.Size(40,48)));marker.setZIndex(id===selected?10:active?5:1);}
     const restaurant = items.find(item => item.id === selected);
     const marker = selected ? markers.current.get(selected) : undefined;
     if (!sdk || !map.current || !restaurant || !marker) return;
@@ -71,7 +71,7 @@ export default function KakaoMap({ items, selected, onSelect, center, onReady }:
     const point = mapPosition(restaurant);
     if (!point) return;
     map.current.panTo(new sdk.LatLng(point.latitude, point.longitude));
-  }, [sdk, selected, items]);
+  }, [sdk, selected, highlighted, items]);
 
   useEffect(()=>{if(sdk && map.current && center && !selected)map.current.panTo(new sdk.LatLng(center.latitude,center.longitude));},[sdk,center,selected,items]);
 

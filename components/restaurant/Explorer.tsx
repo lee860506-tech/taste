@@ -16,8 +16,8 @@ export default function Explorer(){
  const initial=params.get('category')||'전체';
  const[category,setCategory]=useState<string>((categories as readonly string[]).includes(initial)?initial:'전체');
  const[region,setRegion]=useState(regions.includes(params.get('region')||'')?params.get('region')!:'전체');
- const[query,setQuery]=useState('');const[view,setView]=useState(params.get('view')==='map'?'map':'list');const[selected,setSelected]=useState<string>();
- const[source,setSource]=useState<'sample'|PublicSource>('commercial');const[live,setLive]=useState<Restaurant[]>([]);
+ const[query,setQuery]=useState(params.get('query')||'');const[view,setView]=useState(params.get('view')==='map'?'map':'list');const[selected,setSelected]=useState<string|undefined>(params.get('select')||undefined);
+ const[source,setSource]=useState<'sample'|PublicSource>(params.get('source')==='sample'?'sample':params.get('source')==='licenses'?'licenses':'commercial');const[live,setLive]=useState<Restaurant[]>([]);
  const[address,setAddress]=useState('');const[regionCode,setRegionCode]=useState(()=>/^(\d{2}|\d{5}|\d{8})$/.test(params.get('regionCode')||'')?params.get('regionCode')!:defaultNeighborhoodCode);
  const[loading,setLoading]=useState(false);const[error,setError]=useState('');const[page,setPage]=useState(0);const[hasMore,setHasMore]=useState(false);const[total,setTotal]=useState(0);
  const[storage,setStorage]=useState<'unknown'|'database'|'live'>('unknown');
@@ -38,10 +38,10 @@ export default function Explorer(){
    else{const p=new URLSearchParams({source,page:String(nextPage),category,name:query});if(source==='commercial')p.set('regionCode',regionCode);if(source==='licenses'&&address)p.set('address',address);response=await fetch(`/api/restaurants/db?${p}`,{signal:controller.signal});}
    let data=await response.json();let origin:'database'|'live'='database';
    if(response.status===503||(response.ok&&data.total===0&&nextPage===1)){response=await fetch('/api/restaurants',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({source,page:nextPage,regionCode,address,name:source==='licenses'?query:undefined,...(source==='commercial'&&nextLocation&&nextRadius?{center:nextLocation,radius:nextRadius}:{})})});data=await response.json();origin='live';}
-   if(!response.ok)throw new Error(data.error||'조회하지 못했어요.');if(controller.signal.aborted)return;setLive(data.items);setPage(data.page);setTotal(data.total);setHasMore(data.hasMore);setSelected(undefined);setStorage(origin);
+   if(!response.ok)throw new Error(data.error||'조회하지 못했어요.');if(controller.signal.aborted)return;setLive(data.items);setPage(data.page);setTotal(data.total);setHasMore(data.hasMore);setSelected((data.items as Restaurant[]).some(item=>item.id===params.get('select'))?params.get('select')!:undefined);setStorage(origin);
   }catch(e){if(!controller.signal.aborted){setError((e as Error).message);setLive([]);setPage(0);setTotal(0);setHasMore(false);}}finally{if(!controller.signal.aborted)setLoading(false)}
  }
- useEffect(()=>{if(params.get('nearby')!=='1')void load()},[]);
+ useEffect(()=>{if(params.get('nearby')!=='1'&&source!=='sample')void load()},[]);
  useEffect(()=>{const key=`${query}|${category}`;if(lastFilters.current===key)return;lastFilters.current=key;if(storage!=='database'||source==='sample')return;const timer=setTimeout(()=>void load(1),300);return()=>clearTimeout(timer)},[query,category,storage]);
  function reset(){setQuery('');setCategory('전체');setRegion('전체');setRadius(0)}
  return <main className="page-shell">

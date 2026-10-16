@@ -57,10 +57,10 @@ export default function Home() {
       <h1 className="sr-only">준혁이랑 냠냠지도</h1>
       <nav className="cover-navigation" aria-label="표지 바로가기">
         <Link className="cover-hotspot cover-map" href="/explore?view=map" aria-label="맛집지도 보기" />
-        <Link className="cover-hotspot cover-themes" href="#categories" aria-label="테마별 음식 찾기" />
-        <Link className="cover-hotspot cover-regions" href="#regions" aria-label="지역별 찾기" />
-        <Link className="cover-hotspot cover-recommend" href="#categories" aria-label="추천 음식 둘러보기" />
-        <Link className="cover-hotspot cover-search" href="/explore" aria-label="음식점 검색" />
+        <Link className="cover-hotspot cover-themes" href="/themes" aria-label="테마별 음식 찾기" />
+        <Link className="cover-hotspot cover-regions" href="/regions" aria-label="지역별 찾기" />
+        <Link className="cover-hotspot cover-recommend" href="/courses" aria-label="추천 코스 만들기" />
+        <Link className="cover-hotspot cover-search" href="/search" aria-label="음식점 검색" />
         <Link className="cover-hotspot cover-saved" href="/saved" aria-label="내 맛집 보기" />
       </nav>
       <Link className="cover-hotspot cover-start" href={exploreHref} aria-label="맛집 탐험 시작" />
